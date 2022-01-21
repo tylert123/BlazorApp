@@ -1,0 +1,15 @@
+﻿@using Model
+
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+	<h5 class="card-title">Amenities - @Amenity.Id</h5>
+	<p class="card-text">@Amenity.Name</p>
+	<p class="card-text">@Amenity.Description</p>
+	<EditDeleteButton IsAdmin="false"></EditDeleteButton>
+  </div>
+</div>
+
+@code {
+	[Parameter]
+	public BlazorAmenities Amenity { get; set; }
+}
