@@ -12,18 +12,29 @@
 <h3 class="text-info">Room List</h3>
 
 <h4 class="text-info">Hotel Rooms</h4>
+<span>Rooms Selected - @SelectedRooms</span>
+<br />
 @foreach(var room in RoomsList)
 {
-	<IndividualRoom Room="@room"></IndividualRoom>
+	<IndividualRoom OnRoomCheckBoxSelection="RoomSelectionCounterChanged" Room="@room"></IndividualRoom>
 }
 
 <h4 class="text-info">Amenities List</h4>
 @foreach(var amenity in AmenitiesList)
 {
-	<IndividualAmenity Amenity="@amenity"></IndividualAmenity>
+	<IndividualAmenity OnAmenitySelection="AmenitySelectionChanged" Amenity="@amenity">
+		<FirstFragment>#1</FirstFragment>
+		<SeconFragment>#2</SeconFragment>
+	</IndividualAmenity>
 }
+<br />
+
+<p>Selected Amenity: @SelectedAmenity</p>
 
 @code {
+	public int SelectedRooms { get; set; } = 0;
+	public string SelectedAmenity { get; set; } = "";
+
 	List<BlazorRoom> RoomsList = new List<BlazorRoom>();
 	List<BlazorAmenities> AmenitiesList = new List<BlazorAmenities>();
 
@@ -74,5 +85,22 @@
 				Name = "Free Breakfast",
 				Description = "Enjoy free breakfast daily."
 			});
+	}
+
+	protected void RoomSelectionCounterChanged(bool isRoomSelected)
+	{
+		if (isRoomSelected)
+		{
+			SelectedRooms++;
+		}
+		else
+		{
+			SelectedRooms--;
+		}
+	}
+
+	protected void AmenitySelectionChanged(string amenitySelected)
+	{
+		SelectedAmenity = amenitySelected;
 	}
 }

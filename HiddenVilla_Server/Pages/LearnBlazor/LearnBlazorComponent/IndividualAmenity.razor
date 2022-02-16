@@ -1,10 +1,11 @@
 ﻿@using Model
 
 <div class="card" style="width: 18rem;">
-  <div class="card-body">
+  <div class="card-body" @onclick="(args)=> AmenityDivClicked(args, Amenity.Name)">
 	<h5 class="card-title">Amenities - @Amenity.Id</h5>
 	<p class="card-text">@Amenity.Name</p>
 	<p class="card-text">@Amenity.Description</p>
+	<p class="card-text">RF from Parent - @FirstFragment @SeconFragment</p>
 	<EditDeleteButton IsAdmin="false"></EditDeleteButton>
   </div>
 </div>
@@ -12,4 +13,18 @@
 @code {
 	[Parameter]
 	public BlazorAmenities Amenity { get; set; }
+
+	[Parameter]
+	public RenderFragment FirstFragment { get; set; }
+
+	[Parameter]
+	public RenderFragment SeconFragment { get; set; }
+
+	[Parameter]
+	public EventCallback<string> OnAmenitySelection { get; set; }
+
+	protected async Task AmenityDivClicked(MouseEventArgs e, string name)
+	{
+		await OnAmenitySelection.InvokeAsync((string)name);
+	}
 }
