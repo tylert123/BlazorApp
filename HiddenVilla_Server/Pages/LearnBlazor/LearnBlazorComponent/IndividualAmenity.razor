@@ -5,7 +5,7 @@
 	<h5 class="card-title">Amenities - @Amenity.Id</h5>
 	<p class="card-text">@Amenity.Name</p>
 	<p class="card-text">@Amenity.Description</p>
-	<p class="card-text">RF from Parent - @FirstFragment @SeconFragment</p>
+	<p class="card-text">RF from Parent - @FirstFragment @SecondFragment</p>
 	<EditDeleteButton IsAdmin="false"></EditDeleteButton>
   </div>
 </div>
@@ -18,7 +18,7 @@
 	public RenderFragment FirstFragment { get; set; }
 
 	[Parameter]
-	public RenderFragment SeconFragment { get; set; }
+	public RenderFragment SecondFragment { get; set; }
 
 	[Parameter]
 	public EventCallback<string> OnAmenitySelection { get; set; }
