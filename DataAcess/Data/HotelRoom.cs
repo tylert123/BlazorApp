@@ -17,11 +17,11 @@ namespace DataAcess.Data
         public int Occupancy { get; set; }
         [Required]
         public double RegularRate { get; set; }
-        public string Details { get; set; }
-        public string SqFt { get; set; }
-        public string CreatedBy { get; set; }
+        public string? Details { get; set; }
+        public string? SqFt { get; set; }
+        public string? CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public string UpdatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
     }
 }

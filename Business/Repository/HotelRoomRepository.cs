@@ -43,11 +43,12 @@ namespace Business.Repository
             return 0;
         }
 
-        public async Task<IEnumerable<HotelRoomDTO>> GetAllHotelRoom()
+        public async Task<IEnumerable<HotelRoomDTO>> GetAllHotelRooms()
         {
             try
             {
-                IEnumerable<HotelRoomDTO> hotelRoomDTOs = _mapper.Map<IEnumerable<HotelRoom>, IEnumerable<HotelRoomDTO>>(_db.HotelRooms);
+                IEnumerable<HotelRoomDTO> hotelRoomDTOs = 
+                    _mapper.Map<IEnumerable<HotelRoom>, IEnumerable<HotelRoomDTO>>(_db.HotelRooms);
 
                 return hotelRoomDTOs;
             }
