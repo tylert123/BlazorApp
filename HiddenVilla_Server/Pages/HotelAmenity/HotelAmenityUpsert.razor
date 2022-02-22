@@ -1,0 +1,183 @@
+﻿@page "/Hotel-Amenity/Create"
+@page "/Hotel-Amenity/Edit/{Id:int}"
+@using Models
+@using Business.Repository.IRepository
+@using HiddenVilla_Server.Service.IService
+@inject IHotelAmenityRepository HotelAmenityRepository
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<div class="row mt-2 mb-5">
+	<h3 class="card-title text-info mb-3 ml-3">@Title Hotel Amenity</h3>
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-body">
+				<EditForm Model="HotelAmenityModel" OnValidSubmit="HandleHotelAmenityUpsert">
+					<DataAnnotationsValidator/>
+					@*<ValidationSummary/>*@
+					<div class="form-group">
+						<label>Name</label>
+						<InputText @bind-Value="HotelAmenityModel.Name" class="form-control"></InputText>
+						<ValidationMessage For="()=>HotelAmenityModel.Name"></ValidationMessage>
+					</div>
+					<div class="form-group">
+						<label>Description</label>
+						<InputTextArea @bind-Value="HotelAmenityModel.Description" class="form-control"></InputTextArea>
+						@*<BlazoredTextEditor @ref="@QuillHtml" Placeholder= "Please enter room details">
+							<ToolbarContent>
+								<select class="ql-header">
+									<option selected=""></option>
+									<option value="1"></option>
+									<option value="2"></option>
+									<option value="3"></option>
+									<option value="4"></option>
+									<option value="5"></option>
+								</select>
+								<span class="ql-formats">
+									<button class="ql-bold"></button>
+									<button class="ql-italic"></button>
+									<button class="ql-underline"></button>
+									<button class="ql-strike"></button>
+								</span>
+								<span class="ql-formats">
+									<select class="ql-color"></select>
+									<select class="ql-background"></select>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-list" value="ordered"></button>
+									<button class="ql-list" value="bullet"></button>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-link"></button>
+								</span>
+							</ToolbarContent>
+							<EditorContent>
+								
+							</EditorContent>
+						</BlazoredTextEditor>*@
+					</div>
+					<div class="form-group">
+						<label>Timing</label>
+						<InputText @bind-Value="HotelAmenityModel.Timing" class="form-control"></InputText>
+						<ValidationMessage For="()=>HotelAmenityModel.Timing"></ValidationMessage>
+					</div>
+					<div class="form-group">
+						<label>Icon Style</label>
+						<InputText @bind-Value="HotelAmenityModel.IconStyle" class="form-control"></InputText>
+						<ValidationMessage For="()=>HotelAmenityModel.IconStyle"></ValidationMessage>
+					</div>
+					<div class="form-group">
+						<button class="btn btn-primary">@Title Amenity</button>
+						<NavLink href="Hotel-Amenity" class="btn btn-secondary">Back to Index</NavLink>
+					</div>
+				</EditForm>
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int? Id { get; set; }
+
+	private HotelAmenityDTO HotelAmenityModel { get; set; } = new HotelAmenityDTO();
+	private string Title { get; set; } = "Create";
+	//public BlazoredTextEditor QuillHtml { get; set; } = new BlazoredTextEditor();
+	[CascadingParameter]
+	public Task<AuthenticationState> AuthenticationState { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		var authenticationState = await AuthenticationState;
+		//if(!authenticationState.User.Identity.IsAuthenticated)
+		if(!authenticationState.User.IsInRole(Common.SD.Role_Admin))
+		{
+			var uri = new Uri(NavigationManager.Uri);
+			NavigationManager.NavigateTo($"/identity/account/login?returnUrl={uri.LocalPath}");
+		}
+		if (Id != null)
+		{
+			//updating
+			Title = "Update";
+			HotelAmenityModel = await HotelAmenityRepository.GetHotelAmenity(Id.Value);
+		}
+		else
+		{
+			//create
+			HotelAmenityModel = new HotelAmenityDTO();
+		}
+	}
+
+	//protected async override Task OnAfterRenderAsync(bool firstRender)
+	//{
+	//	if(!firstRender)
+	//		return;
+	//	bool loading = true;
+	//	while(loading)
+	//	{
+	//		try
+	//		{
+	//			if(!string.IsNullOrEmpty(HotelAmenityModel.Details))
+	//			{
+	//				await this.QuillHtml.LoadHTMLContent(HotelRoomModel.Details);
+	//			}
+	//			loading = false;
+	//		}
+	//		catch
+	//		{
+	//			await Task.Delay(10);
+	//			loading = true;
+	//		}
+	//	}
+
+	//	//return base.OnAfterRenderAsync(firstRender);
+	//}
+
+	private async Task HandleHotelAmenityUpsert()
+	{
+		try
+		{
+			var amenityDetailsByName = await HotelAmenityRepository.IsAmenityUnique(HotelAmenityModel.Name, HotelAmenityModel.Id);
+			if(amenityDetailsByName!=null)
+			{
+				//there is duplicate amenity show error
+				await JsRuntime.ToastrError("Amenity name already exists.");
+				return;
+			}
+
+			if(HotelAmenityModel.Id!=0 && Title=="Update")
+			{
+				//update
+				//HotelAmenityModel.Details = await QuillHtml.GetHTML();
+				HotelAmenityModel.Description = HotelAmenityModel.Description;
+
+				var updateAmenityResult = await HotelAmenityRepository.UpdateHotelAmenity(HotelAmenityModel.Id, HotelAmenityModel);
+				
+				await JsRuntime.ToastrSuccess("Hotel Amenity updated successfully.");
+			}
+			else
+			{
+				//create
+				//HotelAmenityModel.Description = HotelAmenityModel.Description;
+				var createResult = await HotelAmenityRepository.CreateHotelAmenity(HotelAmenityModel);
+				await JsRuntime.ToastrSuccess("Hotel Amenity created successfully.");
+
+			}
+		}
+		catch(Exception ex)
+		{
+			//log execptions
+		}
+
+		NavigationManager.NavigateTo("Hotel-Amenity");
+	}
+
+	//public void SetHTML()
+	//{
+	//	if(!string.IsNullOrEmpty(HotelRoomModel.Details))
+	//	{
+	//		this.QuillHtml.LoadHTMLContent(HotelRoomModel.Details);
+	//	}
+	//	StateHasChanged();
+	//}
+}

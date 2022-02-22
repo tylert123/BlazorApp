@@ -15,5 +15,6 @@ namespace DataAcess.Data
 
         public DbSet<HotelRoom> HotelRooms { get; set; } //name here used by EF when creating the table in SqlServer
         public DbSet<HotelRoomImage> HotelRoomsImages { get; set; }
-    }
+		public DbSet<HotelAmenity> HotelAmenities { get; set; }
+	}
 }
