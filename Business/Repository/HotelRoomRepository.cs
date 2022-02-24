@@ -3,11 +3,6 @@ using Business.Repository.IRepository;
 using DataAcess.Data;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Repository
 {
@@ -29,16 +24,16 @@ namespace Business.Repository
             var addedHotelRoom = await _db.HotelRooms.AddAsync(hotelRoom);
             await _db.SaveChangesAsync();
 
-            return _mapper.Map<HotelRoom, HotelRoomDTO>(addedHotelRoom.Entity); 
+            return _mapper.Map<HotelRoom, HotelRoomDTO>(addedHotelRoom.Entity);
         }
 
         public async Task<int> DeleteHotelRoom(int roomId)
         {
             var roomDetails = await _db.HotelRooms.FindAsync(roomId);
-            if(roomDetails != null)
+            if (roomDetails != null)
             {
                 var allimages = await _db.HotelRoomsImages.Where(x => x.RoomId == roomId).ToListAsync();
-                
+
                 _db.HotelRoomsImages.RemoveRange(allimages);
 
                 _db.HotelRooms.Remove(roomDetails);
@@ -51,9 +46,9 @@ namespace Business.Repository
         {
             try
             {
-                IEnumerable<HotelRoomDTO> hotelRoomDTOs = 
+                IEnumerable<HotelRoomDTO> hotelRoomDTOs =
                     _mapper.Map<IEnumerable<HotelRoom>, IEnumerable<HotelRoomDTO>>
-                    (_db.HotelRooms.Include(x=>x.HotelRoomImages));
+                    (_db.HotelRooms.Include(x => x.HotelRoomImages));
 
                 return hotelRoomDTOs;
             }
@@ -67,11 +62,11 @@ namespace Business.Repository
         {
             try
             {
-                HotelRoomDTO hotelRoom = _mapper.Map<HotelRoom, HotelRoomDTO>(await _db.HotelRooms.Include(x=>x.HotelRoomImages).FirstOrDefaultAsync(x => x.Id == roomId));
+                HotelRoomDTO hotelRoom = _mapper.Map<HotelRoom, HotelRoomDTO>(await _db.HotelRooms.Include(x => x.HotelRoomImages).FirstOrDefaultAsync(x => x.Id == roomId));
 
                 return hotelRoom;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -91,7 +86,7 @@ namespace Business.Repository
                 else
                 {
                     HotelRoomDTO hotelRoom = _mapper.Map<HotelRoom, HotelRoomDTO>(await _db.HotelRooms.FirstOrDefaultAsync(x => x.Name.ToLower() == name.ToLower()
-                    && x.Id!=roomId));
+                    && x.Id != roomId));
 
                     return hotelRoom;
                 }
@@ -123,7 +118,7 @@ namespace Business.Repository
                     return null;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }

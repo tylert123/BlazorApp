@@ -1,9 +1,4 @@
 ﻿using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Repository.IRepository
 {
@@ -14,6 +9,6 @@ namespace Business.Repository.IRepository
         public Task<HotelRoomDTO> GetHotelRoom(int roomId);
         public Task<int> DeleteHotelRoom(int roomId);
         public Task<IEnumerable<HotelRoomDTO>> GetAllHotelRooms();
-        public Task<HotelRoomDTO> IsRoomUnique(string name, int roomId=0);
+        public Task<HotelRoomDTO> IsRoomUnique(string name, int roomId = 0);
     }
 }

@@ -3,11 +3,6 @@ using Business.Repository.IRepository;
 using DataAcess.Data;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Repository
 {
@@ -24,7 +19,7 @@ namespace Business.Repository
 
         public async Task<int> CreateHotelRoomImage(HotelRoomImageDTO imageDTO)
         {
-            var image = _mapper.Map<HotelRoomImageDTO,HotelRoomImage>(imageDTO);
+            var image = _mapper.Map<HotelRoomImageDTO, HotelRoomImage>(imageDTO);
             await _db.HotelRoomsImages.AddAsync(image);
             return await _db.SaveChangesAsync();
         }
@@ -40,7 +35,7 @@ namespace Business.Repository
         {
             var allImages = await _db.HotelRoomsImages.FirstOrDefaultAsync(x => x.RoomImageUrl.ToLower() == imageUrl.ToLower());
 
-            if(allImages == null)
+            if (allImages == null)
             {
                 return 0;
             }
@@ -50,7 +45,7 @@ namespace Business.Repository
 
         public async Task<int> DeleteHotelRoomImageByRoomId(int roomId)
         {
-            var imageList = await _db.HotelRoomsImages.Where(x=>x.RoomId==roomId).ToListAsync();
+            var imageList = await _db.HotelRoomsImages.Where(x => x.RoomId == roomId).ToListAsync();
             _db.HotelRoomsImages.RemoveRange(imageList);
             return await _db.SaveChangesAsync();
         }

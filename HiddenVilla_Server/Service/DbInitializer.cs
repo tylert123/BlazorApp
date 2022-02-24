@@ -22,7 +22,7 @@ namespace HiddenVilla_Server.Service
         {
             try
             {
-                if(_db.Database.GetPendingMigrations().Count() > 0)
+                if (_db.Database.GetPendingMigrations().Count() > 0)
                 {
                     _db.Database.Migrate();
                 }

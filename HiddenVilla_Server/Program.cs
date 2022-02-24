@@ -4,8 +4,8 @@ using DataAcess.Data;
 using HiddenVilla_Server.Data;
 using HiddenVilla_Server.Service;
 using HiddenVilla_Server.Service.IService;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 string connString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -59,7 +59,7 @@ app.Run();
 
 void SeedDatabase()
 {
-    using(var scope = app.Services.CreateScope())
+    using (var scope = app.Services.CreateScope())
     {
         var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
         dbInitializer.Initialize();

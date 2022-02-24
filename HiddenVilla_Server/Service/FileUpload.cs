@@ -1,6 +1,5 @@
 ﻿using HiddenVilla_Server.Service.IService;
 using Microsoft.AspNetCore.Components.Forms;
-using System.IO;
 
 namespace HiddenVilla_Server.Service
 {
@@ -19,7 +18,7 @@ namespace HiddenVilla_Server.Service
             try
             {
                 var path = $"{_webHostEnvironment.WebRootPath}\\RoomImages\\{fileName}";
-                if(File.Exists(path))
+                if (File.Exists(path))
                 {
                     File.Delete(path);
                     return true;
@@ -37,19 +36,19 @@ namespace HiddenVilla_Server.Service
             try
             {
                 FileInfo fileInfo = new FileInfo(file.Name);
-                var fileName = Guid.NewGuid().ToString()+fileInfo.Extension;
+                var fileName = Guid.NewGuid().ToString() + fileInfo.Extension;
                 var folderDirectory = $"{_webHostEnvironment.WebRootPath}\\RoomImages";
                 var path = Path.Combine(_webHostEnvironment.WebRootPath, "RoomImages", fileName);
 
                 var memoryStream = new MemoryStream();
                 await file.OpenReadStream().CopyToAsync(memoryStream);
 
-                if(!Directory.Exists(folderDirectory))
+                if (!Directory.Exists(folderDirectory))
                 {
                     Directory.CreateDirectory(folderDirectory);
                 }
 
-                await using(var fs = new FileStream(path, FileMode.Create, FileAccess.Write ))
+                await using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
                 {
                     memoryStream.WriteTo(fs);
                 }
