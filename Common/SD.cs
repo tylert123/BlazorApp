@@ -15,5 +15,6 @@
         public const string Status_NoShow = "No Show";
         public const string Status_Cancelled = "Cnacelled";
 
+        public const string Local_RoomOrderDetails = "RoomOrderDetails";
     }
 }

@@ -21,7 +21,7 @@ namespace Models
         public DateTime? ActualCheckInDate { get; set; }
         public DateTime? ActualCheckOutDate { get; set; }
         [Required]
-        public long TotalCost { get; set; }
+        public double TotalCost { get; set; }
         [Required]
         public int RoomId { get; set; }
         public bool IsPaymentSuccessful { get; set; } = false;
@@ -31,7 +31,7 @@ namespace Models
 
         public string Email { get; set; }
         public string? Phone { get; set; }
-        public HotelRoomDTO HotelRoomDTO { get; set; }
+        public HotelRoomDTO? HotelRoomDTO { get; set; }
         public string? Status { get; set; }
     }
 }
