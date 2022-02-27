@@ -4,6 +4,8 @@
 @inject IHotelRoomService hotelRoomService
 @inject IStripePaymentService stripePaymentService
 @inject IRoomOrderDetailsService roomOrderDetailsService
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = SD.Role_Customer)]
 
 @if(HotelBooking?.OrderDetails?.HotelRoomDTO?.HotelRoomImages == null)
 {
@@ -165,6 +167,15 @@ else
                     HotelBooking.OrderDetails.HotelRoomDTO.TotalDays = 1;
                     HotelBooking.OrderDetails.HotelRoomDTO.TotalAmount = HotelBooking.OrderDetails.HotelRoomDTO.RegularRate;
                 }
+            }
+            if(await localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails) != null)
+            {
+                var userInfo = await localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails);
+                HotelBooking.OrderDetails.Name = userInfo.Name;
+                HotelBooking.OrderDetails.Email = userInfo.Email;
+                HotelBooking.OrderDetails.Phone = userInfo.PhoneNo;
+                HotelBooking.OrderDetails.UserId = userInfo.Id;
+
             }
         }
         catch(Exception ex)
