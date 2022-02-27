@@ -4,6 +4,7 @@ using DataAcess.Data;
 using HiddenVilla_API.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -56,6 +57,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 var appSettingsSection = builder.Configuration.GetSection("APISettings");
 builder.Services.Configure<APISettings>(appSettingsSection);
 
+builder.Services.Configure<MailJetSettings>(builder.Configuration.GetSection("MailJetSettings"));
+
 var apiSettings = appSettingsSection.Get<APISettings>();
 var key = Encoding.ASCII.GetBytes(apiSettings.SecretKey);
 builder.Services.AddAuthentication(opt =>
@@ -84,6 +87,7 @@ builder.Services.AddScoped<IHotelRoomRepository, HotelRoomRepository>();
 builder.Services.AddScoped<IHotelImagesRepository, HotelImagesRepository>();
 builder.Services.AddScoped<IHotelAmenityRepository, HotelAmenityRepository>();
 builder.Services.AddScoped<IRoomOrderDetailsRepository, RoomOrderDetailsRepository>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 builder.Services.AddCors(o => o.AddPolicy("HiddenVilla", builderCors =>
    {
