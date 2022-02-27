@@ -25,6 +25,7 @@ builder.Services.AddScoped<IHotelRoomRepository, HotelRoomRepository>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IHotelImagesRepository, HotelImagesRepository>();
 builder.Services.AddScoped<IHotelAmenityRepository, HotelAmenityRepository>();
+builder.Services.AddScoped<IRoomOrderDetailsRepository, RoomOrderDetailsRepository>();
 builder.Services.AddScoped<IFileUpload, FileUpload>();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
